@@ -1,27 +1,41 @@
-# PlatziAppCrud
+# Platzi App CRUD
+## [Ver Demo 👀](https://portafolio-anthony-avellaneda.netlify.app/)
+Este proyecto es una aplicación CRUD (Crear, Leer, Actualizar y Eliminar) desarrollada con Angular. Fue creado como un ejemplo práctico para aprender y demostrar el uso de Angular junto con TailwindCSS.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.3.
+## Características
 
-## Development server
+- **Framework**: Angular (v18.1.0)
+- **Estilos**: TailwindCSS
+- **Herramientas de desarrollo**:
+  - TypeScript
+- Funcionalidades principales:
+  - Operaciones CRUD
+  - Componentes modulares
+  - Servicios para interacción con APIs
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Requisitos previos
 
-## Code scaffolding
+- Node.js (versión 16+ recomendada)
+- Angular CLI instalado globalmente
+  ```bash
+  npm install -g @angular/cli
+  ```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Estructura del proyecto
+```bash
+platzi-app-crud/
+├── src/
+│   ├── app/
+│   │   ├── core/           # Interfaces y servicios principales
+│   │   ├── modules/        # Componentes modulares (CRUD, notificaciones, búsqueda, etc.)
+│   │   └── shared/         # Componentes compartidos (pie de página, encabezados, etc.)
+│   ├── environments/       # Configuraciones de entorno
+│   ├── index.html          # Archivo principal de HTML
+│   └── styles.css          # Estilos globales
+├── angular.json            # Configuración del proyecto Angular
+├── package.json            # Dependencias y scripts
+└── tailwind.config.js      # Configuración de TailwindCSS
+```
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Pantalla 💡
+![preview img](./public/assets/mockup.png)
