@@ -1,5 +1,5 @@
 # Platzi App CRUD
-## [Ver Demo 👀](https://portafolio-anthony-avellaneda.netlify.app/)
+## [Ver Demo 👀](https://platzi-app-crud.vercel.app/)
 Este proyecto es una aplicación CRUD (Crear, Leer, Actualizar y Eliminar) desarrollada con Angular. Fue creado como un ejemplo práctico para aprender y demostrar el uso de Angular junto con TailwindCSS.
 
 ## Características
