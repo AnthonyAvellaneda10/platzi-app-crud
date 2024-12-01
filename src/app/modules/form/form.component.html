@@ -1,0 +1,110 @@
+@if (isOpenForm) {
+    <div 
+    class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center transition-opacity duration-300 z-10">
+    <div
+        class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+            <div class="p-4 sm:p-7">
+                <div class="flex justify-end">
+                    <button type="button" (click)="closeFormModal()"
+                        class="inline-flex items-center justify-center w-8 h-8 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full focus:outline-none transition duration-300">
+                        ✕
+                    </button>
+                </div>
+
+                <div class="text-center">
+                    <h3 id="hs-modal-signup-label" class="block text-2xl font-bold text-gray-800">{{ formTitle }}</h3>
+                </div>
+
+                <div class="mt-5">
+                    <form (ngSubmit)="submitForm()" [formGroup]="formProduct">
+                        <div class="grid gap-y-4">
+                            <!-- Title -->
+                            <div>
+                                <label for="title" class="block text-sm">Nombre del producto</label>
+                                <input type="text" id="title" formControlName="title"
+                                    class="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:border-indigo-500 focus:ring-indigo-500 transition duration-300" />
+                                <div *ngIf="formProduct.get('title')?.invalid && formProduct.get('title')?.touched"
+                                    class="text-red-600 text-sm">
+                                    <span *ngIf="formProduct.get('title')?.errors?.['required']">El nombre es
+                                        obligatorio.</span>
+                                    <span *ngIf="formProduct.get('title')?.errors?.['minlength']">El nombre debe tener
+                                        al menos 3 caracteres.</span>
+                                </div>
+                            </div>
+
+                            <!-- Price -->
+                            <div>
+                                <label for="price" class="block text-sm">Precio</label>
+                                <input type="number" id="price" formControlName="price"
+                                    class="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:border-indigo-500 focus:ring-indigo-500 transition duration-300" />
+                                <div *ngIf="formProduct.get('price')?.invalid && formProduct.get('price')?.touched"
+                                    class="text-red-600 text-sm">
+                                    <span *ngIf="formProduct.get('price')?.errors?.['required']">El precio es
+                                        obligatorio.</span>
+                                    <span *ngIf="formProduct.get('price')?.errors?.['min']">El precio debe ser mayor que
+                                        0.</span>
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div>
+                                <label for="description" class="block text-sm">Descripción</label>
+                                <textarea id="description" formControlName="description" rows="5"
+                                    class="resize-none py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:border-indigo-500 focus:ring-indigo-500 transition duration-300"></textarea>
+                                <div *ngIf="formProduct.get('description')?.invalid && formProduct.get('description')?.touched"
+                                    class="text-red-600 text-sm">
+                                    <span *ngIf="formProduct.get('description')?.errors?.['required']">La descripción es
+                                        obligatoria.</span>
+                                    <span *ngIf="formProduct.get('description')?.errors?.['minlength']">La descripción
+                                        debe tener al menos 10 caracteres.</span>
+                                </div>
+                            </div>
+
+                            <!-- Category -->
+                            <div>
+                                <label for="category" class="block text-sm">Categoría</label>
+                                <select id="category" formControlName="categoryId"
+                                    class="py-3 px-4 block w-full border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:border-indigo-500 focus:ring-indigo-500 transition duration-300">
+                                    @for (category of categories; track $index) {
+                                        <option [value]="category.id">{{ category.name }}</option>
+                                    }
+                                </select>
+                                <div *ngIf="formProduct.get('categoryId')?.invalid && formProduct.get('categoryId')?.touched"
+                                    class="text-red-600 text-sm">
+                                    <span>Debe seleccionar una categoría.</span>
+                                </div>
+                            </div>
+
+                            <!-- Images -->
+                            <div formArrayName="images">
+                                <label class="block text-sm">Imágenes</label>
+                                <div *ngFor="let control of imagesFormArray.controls; let i = index; trackBy: trackByIndex"
+                                    class="flex gap-2 items-center">
+                                    <input [formControlName]="i" placeholder="URL de la imagen"
+                                        class="w-full border rounded text-sm p-2 focus:outline-none focus:ring-1 focus:border-indigo-500 focus:ring-indigo-500 transition duration-300" />
+                                    <button type="button" (click)="removeImage(i)"
+                                        class="bg-red-600 text-white p-2 rounded-md">
+                                        ✕
+                                    </button>
+                                </div>
+
+                                <button type='button' (click)="addImage()"
+                                    class='mt-5 py-2.5 px-6 text-sm bg-indigo-50 text-indigo-500 rounded-lg cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-indigo-100'>
+                                    Añadir URL
+                                </button>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" [disabled]="formProduct.invalid"
+                                class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700 transition duration-300 disabled:opacity-40 disabled:pointer-events-none">
+                                {{ buttonLabel }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
