@@ -47,7 +47,7 @@ Una aplicación web desarrollada con Angular que permite gestionar productos a t
 1. Clonar el repositorio
 
 ```bash
-git clone [URL_DEL_REPOSITORIO]
+git clone https://github.com/AnthonyAvellaneda10/platzi-app-crud.git
 ```
 
 2. Instalar dependencias
