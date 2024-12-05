@@ -1,5 +1,7 @@
 # Platzi Fake Store - Aplicación CRUD
 
+## [Ver demo 👀](https://platzi-app-crud.vercel.app)
+
 ## 📝 Descripción
 Una aplicación web desarrollada con Angular que permite gestionar productos a través de operaciones CRUD (Crear, Leer, Actualizar, Eliminar) utilizando la API de Platzi Fake Store.
 
@@ -97,9 +99,8 @@ Las contribuciones son bienvenidas. Por favor:
 Este proyecto está bajo la Licencia MIT.
 
 ## 🙋‍♂️ Autor
-Desarrollado por Anthony AP
-```
+Desarrollado por [Anthony AP](https://portafolio-anthony-avellaneda.vercel.app/)
 
-Este README proporciona una visión completa de tu aplicación, incluyendo sus características, tecnologías utilizadas, instrucciones de instalación y uso, y otra información relevante para desarrolladores que quieran entender o contribuir al proyecto.
 
-¿Te gustaría que ajustemos alguna sección o agreguemos información adicional?
+## Pantallas
+![Pantalla 1](./public/assets/mockup.png)
