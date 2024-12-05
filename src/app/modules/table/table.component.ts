@@ -6,11 +6,12 @@ import { ModalDeleteComponent } from "../modal-delete/modal-delete.component";
 import { CommonModule } from '@angular/common';
 import { NotificationComponent } from '../notification/notification.component';
 import { FormComponent } from '../form/form.component';
+import { PaginationComponent } from '../pagination/pagination.component';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [SearchComponent, ModalDeleteComponent, CommonModule, NotificationComponent, FormComponent],
+  imports: [SearchComponent, ModalDeleteComponent, CommonModule, NotificationComponent, FormComponent, PaginationComponent],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css'
 })
@@ -55,7 +56,7 @@ export class TableComponent {
         },
       });
     });
-  }
+  }  
 
   getAllCategories(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -120,7 +121,10 @@ export class TableComponent {
     }
   }
 
-  openModal(product: Products) {
+  openModal(product: Products, event?: Event) {
+    if (event) {
+      (event.target as HTMLElement).blur(); // Quita el foco inmediatamente
+    }
     this.isModalOpen = true; // Abre el modal
     this.product = product; // Muestra el nombre
     document.body.classList.add('overflow-hidden');

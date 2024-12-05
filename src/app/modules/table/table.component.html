@@ -32,9 +32,7 @@
 @if(!isLoading) {
 <div class="px-6 py-4 flex justify-between">
 
-
     <app-search (search)="searchProducts($event)" />
-
 
     <button (click)="openForm()"
         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700 disabled:opacity-50 disabled:pointer-events-none transition duration-300">
@@ -110,7 +108,7 @@
                                 <div class="flex items-center gap-2">
 
                                     <button (click)="openForm(product)"
-                                        class="p-2  rounded-full bg-white group transition-all duration-500 hover:bg-indigo-600 flex item-center">
+                                        class="p-2 rounded-full bg-white group transition-all duration-500 hover:bg-indigo-600 flex item-center border-none focus:outline-none focus:ring-0 active:outline-none active:ring-0">
                                         <svg class="cursor-pointer" width="20" height="20" viewBox="0 0 20 20"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path class="fill-indigo-500 group-hover:fill-white"
@@ -118,8 +116,8 @@
                                                 fill="#818CF8"></path>
                                         </svg>
                                     </button>
-                                    <button (click)="openModal(product)"
-                                        class="p-2 rounded-full bg-white group transition-all duration-500 hover:bg-red-600 flex item-center">
+                                    <button (click)="openModal(product, $event)"
+                                        class="p-2 rounded-full bg-white group transition-all duration-500 hover:bg-red-600 flex item-center border-none focus:outline-none focus:ring-0 active:outline-none active:ring-0">
                                         <svg class="" width="20" height="20" viewBox="0 0 20 20" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path class="fill-red-600 group-hover:fill-white"
@@ -131,18 +129,42 @@
                             </td>
                         </tr>
                         }
-                        } @if (productList && productList.length === 0) {
+                        } @if (!isLoading && productList.length === 0 && searchQuery === '') {
+                        <!-- Caso inicial: Sin productos -->
+                        <tr>
+                            <td colspan="6" class="text-center text-gray-500 py-5 text-sm">
+                                <div class="space-y-4">
+                                    <p>No se ha creado ningún producto 📦, comience creando uno ✨.</p>
+                                    <button (click)="openForm()"
+                                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700 disabled:opacity-50 disabled:pointer-events-none transition duration-300"><svg
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" class="shrink-0 size-4">
+                                            <path d="M5 12h14"></path>
+                                            <path d="M12 5v14"></path>
+                                        </svg>
+                                        Añadir producto
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                        @if (!isLoading && productList.length === 0 && searchQuery !== '') {
+                        <!-- Caso de búsqueda sin resultados -->
                         <tr>
                             <td colspan="6" class="text-center text-red-500 py-5">
                                 No se encontró resultados similares a "{{ searchQuery }}"
                             </td>
                         </tr>
                         }
-
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Pagination -->
+<app-pagination />
+
 }

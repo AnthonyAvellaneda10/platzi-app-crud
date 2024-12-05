@@ -44,4 +44,8 @@ export class ApiService {
   deleteProduct(id: number) {
     return this.http.delete(`${this.apiUrl}products/${id}`)
   }
+
+  getProductsPaginated(offset: number, limit: number): Observable<{ data: Products[]; total: number }> {
+    return this.http.get<{ data: Products[]; total: number }>(`${this.apiUrl}products?offset=${offset}&limit=${limit}`);
+  }          
 }
