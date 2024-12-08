@@ -31,32 +31,67 @@ export class TableComponent {
 
   isLoading: boolean = true; // Variable para manejar el estado de carga
 
+  // Variables de paginación
+  currentPage: number = 1;     // Página actual
+  pageSize: number = 10;       // Cantidad de productos por página
+  totalProducts: number = 0;   // Total de productos (asumiendo que lo sabes o puedes obtenerlo)
+  totalPages: number = 0;      // Total de páginas calculadas
+
   ngOnInit(): void {
     this.loadData();
   }
 
   loadData(): void {
-    this.isLoading = true; // Inicia el estado de carga
-    Promise.all([this.getAllProducts(), this.getAllCategories()]).then(() => {
-      this.isLoading = false; // Finaliza el estado de carga
+    this.isLoading = true;
+
+    Promise.all([this.getInitialData(), this.getAllCategories()]).then(() => {
+      this.isLoading = false;
     });
   }
 
-  getAllProducts(): Promise<void> {
+  // Obtenemos inicialmente el total y los productos de la primera página
+  getInitialData(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this._service.getAllProducts().subscribe({
-        next: (response) => {
-          this.productList = this.processProducts(response);
-          this.searchQuery = ''; // Limpia la búsqueda al cargar todo
+      // Ejemplo: primero obtenemos el total
+      // Si no tienes endpoint para total, podrías asumirlo o cambiar la lógica
+      this._service.getTotalProducts().subscribe({
+        next: (total) => {
+          this.totalProducts = total;
+          this.totalPages = Math.ceil(this.totalProducts / this.pageSize);
+          // Ahora cargamos la primera página
+          this.loadProductsByPage(this.currentPage);
           resolve();
         },
         error: (err) => {
           console.error(err);
-          reject();
-        },
+          reject(err);
+        }
       });
     });
-  }  
+  }
+
+  loadProductsByPage(page: number) {
+    this.isLoading = true;
+    const offset = (page - 1) * this.pageSize;
+    this._service.getProducts(offset, this.pageSize).subscribe({
+      next: (response) => {
+        this.productList = this.processProducts(response);
+        this.searchQuery = '';
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  // Evento que se disparará desde el componente de paginación
+  onPageChange(newPage: number) {
+    if (newPage < 1 || newPage > this.totalPages) return;
+    this.currentPage = newPage;
+    this.loadProductsByPage(this.currentPage);
+  }
 
   getAllCategories(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -75,15 +110,26 @@ export class TableComponent {
 
   // Buscar productos por título
   searchProducts(title: string) {
-    this.searchQuery = title; // Actualiza la consulta
+    this.searchQuery = title;
     if (title.trim() === '') {
-      this.getAllProducts();
+      // Regresamos a la primera página con productos sin filtrar
+      this.currentPage = 1;
+      this.loadProductsByPage(this.currentPage);
     } else {
+      this.isLoading = true;
       this._service.getProductsByTitle(title).subscribe({
         next: (response) => {
           this.productList = this.processProducts(response);
+          // Cuando haces búsqueda, podrías o no tener paginación 
+          // dependiendo si la API de búsqueda soporta offset/limit
+          // Aquí asumimos que solo muestras el resultado encontrado.
+          // Ajustar según necesidad.
+          this.isLoading = false;
         },
-        error: (err) => console.error(err),
+        error: (err) => {
+          console.error(err);
+          this.isLoading = false;
+        },
       });
     }
   }
@@ -149,20 +195,19 @@ export class TableComponent {
   
   handleFormSubmit(formData: any) {
     if (this.isEditMode) {
-      // Editar producto
       this._service.updateProduct(this.product.id, formData).subscribe({
         next: () => {
           this.alertMessage = 'Producto actualizado con éxito';
-          this.getAllProducts();
+          this.loadProductsByPage(this.currentPage);
         },
         error: (err) => console.error(err),
       });
     } else {
-      // Añadir producto
       this._service.createProduct(formData).subscribe({
         next: () => {
           this.alertMessage = 'Producto añadido con éxito';
-          this.getAllProducts();
+          // Después de añadir, volvemos a cargar la página actual (o la primera, según se quiera)
+          this.loadProductsByPage(this.currentPage);
         },
         error: (err) => console.error(err),
       });

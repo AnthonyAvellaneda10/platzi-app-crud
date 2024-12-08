@@ -76,8 +76,9 @@
                         @if (productList && productList.length > 0) {
                         @for (product of productList; track $index) {
                         <tr class="bg-white transition-all duration-500 hover:bg-gray-50">
-                            <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 "> {{ $index +
-                                1 }}</td>
+                            <td class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">
+                                {{ (currentPage - 1) * pageSize + ($index + 1) }}
+                            </td>
                             <td class=" px-5 py-3">
                                 <div class="w-48 flex items-center gap-3">
                                     <img class="rounded-md w-10 h-10" [src]="product.images[0]" [alt]="product.title"
@@ -165,6 +166,10 @@
 </div>
 
 <!-- Pagination -->
-<app-pagination />
+<!-- ... Tu código existente ... -->
+
+<!-- Pagination -->
+<app-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)" />
+
 
 }

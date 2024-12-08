@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Category, Products } from '../interfaces/products.interface';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -24,6 +24,20 @@ export class ApiService {
     return this.http.get<Products []>(`${this.apiUrl}products`)
   }
 
+  // Nuevo método para obtener productos con offset y limit
+  getProducts(offset: number, limit: number): Observable<Products[]> {
+    return this.http.get<Products[]>(`${this.apiUrl}products?offset=${offset}&limit=${limit}`);
+  }
+
+  // Si cuentas con un endpoint que retorne el total, úsalo. Ejemplo:
+  getTotalProducts(): Observable<number> {
+    // Esto depende de tu API, si no existe, omite o ajusta la lógica
+    return this.http.get<Products[]>(`${this.apiUrl}products`)
+      .pipe(
+        map(products => products.length) // Esto es solo un ejemplo, aquí sí obtendrías todos y contarías. Lo ideal es un endpoint separado que devuelva el total.
+      );
+  }
+
   getProductsByTitle(title: string): Observable<Products[]> {
     return this.http.get<Products[]>(`${this.apiUrl}products?title=${title}`);
   }  
@@ -32,7 +46,6 @@ export class ApiService {
     return this.http.get<Category[]>(`${this.apiUrl}categories`);
   }
   
-
   updateProduct(id: number, data: any) {
     return this.http.put(`${this.apiUrl}products/${id}`, data, this.httpOptions);
   }
@@ -43,9 +56,5 @@ export class ApiService {
 
   deleteProduct(id: number) {
     return this.http.delete(`${this.apiUrl}products/${id}`)
-  }
-
-  getProductsPaginated(offset: number, limit: number): Observable<{ data: Products[]; total: number }> {
-    return this.http.get<{ data: Products[]; total: number }>(`${this.apiUrl}products?offset=${offset}&limit=${limit}`);
-  }          
+  }        
 }
