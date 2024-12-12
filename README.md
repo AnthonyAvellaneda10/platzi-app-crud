@@ -1,6 +1,7 @@
 # Platzi Fake Store - Aplicación CRUD
 
-## [Ver demo 👀](https://platzi-app-crud.vercel.app)
+## 🌐 Demo
+[Ver aplicación en vivo 👀](https://platzi-app-crud.vercel.app)
 
 ## 📝 Descripción
 Una aplicación web desarrollada con Angular que permite gestionar productos a través de operaciones CRUD (Crear, Leer, Actualizar, Eliminar) utilizando la API de Platzi Fake Store.
@@ -8,34 +9,37 @@ Una aplicación web desarrollada con Angular que permite gestionar productos a t
 ## ✨ Características Principales
 
 ### 📋 Listado de Productos
-- Visualización de productos en una tabla con detalles como:
-  - Nombre del producto
+- **Listado**: Visualización de productos en una tabla con:
+  - Nombre y imagen del producto
   - Precio
   - Descripción
   - Categoría
-  - Imagen del producto
-- Manejo de imágenes con fallback automático
+  - Acciones disponibles
+- **Paginación**: Navegación entre páginas de productos
+- **Manejo de imágenes**: Sistema de fallback automático para imágenes rotas
 
 ### 🔍 Búsqueda
-- Búsqueda en tiempo real de productos por nombre
-- Interfaz intuitiva con feedback visual
+- Búsqueda en tiempo real por nombre de producto
+- Feedback visual durante la búsqueda
+- Manejo de estados sin resultados
 
-### ✏️ Gestión de Productos
-- **Crear**: Añadir nuevos productos con validación de formularios
-- **Editar**: Modificar productos existentes
-- **Eliminar**: Eliminar productos con confirmación
-- **Validaciones**: 
-  - Campos requeridos
-  - Longitud mínima para nombres y descripciones
-  - Precio mínimo
+### ✏️ Operaciones CRUD
+- **Crear**: Formulario para añadir nuevos productos
+- **Editar**: Modificación de productos existentes
+- **Eliminar**: Eliminación con modal de confirmación
+- **Validaciones**:
+  - Campos obligatorios
+  - Longitud mínima para nombres (3 caracteres)
+  - Longitud mínima para descripciones (10 caracteres)
+  - Precio mínimo mayor a 0
   - URLs de imágenes válidas
 
 ### 🎨 Interfaz de Usuario
 - Diseño responsive con Tailwind CSS
 - Notificaciones para feedback de operaciones
 - Modales para confirmaciones
-- Loader para estados de carga
-- Manejo de estados vacíos
+- Skeleton loader para estados de carga
+- Estados vacíos y de error manejados
 
 ## 🛠️ Tecnologías Utilizadas
 - Angular 18
@@ -95,12 +99,9 @@ Las contribuciones son bienvenidas. Por favor:
 4. Empuja a la rama
 5. Abre un Pull Request
 
-## 📄 Licencia
-Este proyecto está bajo la Licencia MIT.
-
 ## 🙋‍♂️ Autor
 Desarrollado por [Anthony AP](https://portafolio-anthony-avellaneda.vercel.app/)
 
 
-## Pantallas
+## Pantalla
 ![Pantalla 1](./public/assets/mockup.png)
