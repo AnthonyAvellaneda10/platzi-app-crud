@@ -20,8 +20,8 @@ export class ApiService {
 
   constructor() { }
 
-  getAllProducts(): Observable<Products []> {
-    return this.http.get<Products []>(`${this.apiUrl}products`)
+  getAllProducts(): Observable<Products[]> {
+    return this.http.get<Products[]>(`${this.apiUrl}products`)
   }
 
   // Nuevo método para obtener productos con offset y limit
@@ -38,23 +38,27 @@ export class ApiService {
       );
   }
 
-  getProductsByTitle(title: string): Observable<Products[]> {
-    return this.http.get<Products[]>(`${this.apiUrl}products?title=${title}`);
-  }  
+  getProductsByTitle(title: string, offset?: number, limit?: number): Observable<Products[]> {
+    let url = `${this.apiUrl}products?title=${title}`;
+    if (offset !== undefined && limit !== undefined) {
+      url += `&offset=${offset}&limit=${limit}`;
+    }
+    return this.http.get<Products[]>(url);
+  }
 
   getAllCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(`${this.apiUrl}categories`);
   }
-  
+
   updateProduct(id: number, data: any) {
     return this.http.put(`${this.apiUrl}products/${id}`, data, this.httpOptions);
   }
-  
+
   createProduct(data: any) {
     return this.http.post(`${this.apiUrl}products`, data, this.httpOptions);
-  }  
+  }
 
   deleteProduct(id: number) {
     return this.http.delete(`${this.apiUrl}products/${id}`)
-  }        
+  }
 }

@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { NotificationComponent } from '../notification/notification.component';
 import { FormComponent } from '../form/form.component';
 import { PaginationComponent } from '../pagination/pagination.component';
+import { SkeletonComponent } from "../skeleton/skeleton.component";
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [SearchComponent, ModalDeleteComponent, CommonModule, NotificationComponent, FormComponent, PaginationComponent],
+  imports: [SearchComponent, ModalDeleteComponent, CommonModule, NotificationComponent, FormComponent, PaginationComponent, SkeletonComponent],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css'
 })
@@ -73,18 +74,41 @@ export class TableComponent {
   loadProductsByPage(page: number) {
     this.isLoading = true;
     const offset = (page - 1) * this.pageSize;
-    this._service.getProducts(offset, this.pageSize).subscribe({
-      next: (response) => {
-        this.productList = this.processProducts(response);
-        this.searchQuery = '';
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error(err);
-        this.isLoading = false;
-      },
-    });
+
+    if (this.searchQuery.trim() !== '') {
+      this._service.getProductsByTitle(this.searchQuery, offset, this.pageSize).subscribe({
+        next: (response) => {
+          this.productList = this.processProducts(response);
+          // Aquí debes agregar la lógica para totalProducts y totalPages
+          if (this.productList.length === 0) {
+            this.totalProducts = 0;
+            this.totalPages = 0;
+          } else {
+            this.totalProducts = this.productList.length;
+            this.totalPages = Math.ceil(this.totalProducts / this.pageSize);
+          }
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error(err);
+          this.isLoading = false;
+        }
+      });
+    } else {
+      // Sin búsqueda, cargar normalmente
+      this._service.getProducts(offset, this.pageSize).subscribe({
+        next: (response) => {
+          this.productList = this.processProducts(response);
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error(err);
+          this.isLoading = false;
+        },
+      });
+    }
   }
+
 
   // Evento que se disparará desde el componente de paginación
   onPageChange(newPage: number) {
@@ -110,29 +134,29 @@ export class TableComponent {
 
   // Buscar productos por título
   searchProducts(title: string) {
-    this.searchQuery = title;
-    if (title.trim() === '') {
-      // Regresamos a la primera página con productos sin filtrar
-      this.currentPage = 1;
-      this.loadProductsByPage(this.currentPage);
-    } else {
+    this.searchQuery = title.trim();
+    this.currentPage = 1;
+
+    if (this.searchQuery === '') {
+      // Si la búsqueda está vacía, recalcular totales antes de cargar la página
       this.isLoading = true;
-      this._service.getProductsByTitle(title).subscribe({
-        next: (response) => {
-          this.productList = this.processProducts(response);
-          // Cuando haces búsqueda, podrías o no tener paginación 
-          // dependiendo si la API de búsqueda soporta offset/limit
-          // Aquí asumimos que solo muestras el resultado encontrado.
-          // Ajustar según necesidad.
-          this.isLoading = false;
+      this._service.getTotalProducts().subscribe({
+        next: (total) => {
+          this.totalProducts = total;
+          this.totalPages = Math.ceil(this.totalProducts / this.pageSize);
+          this.loadProductsByPage(this.currentPage); // Ahora sí cargamos los productos normales
         },
         error: (err) => {
           console.error(err);
           this.isLoading = false;
-        },
+        }
       });
+    } else {
+      // Si hay un término de búsqueda, simplemente carga la página filtrada
+      this.loadProductsByPage(this.currentPage);
     }
   }
+
 
   processProducts(products: Products[]): Products[] {
     return products.map((product) => ({
@@ -192,7 +216,7 @@ export class TableComponent {
     this.isFormOpen = false;
     document.body.classList.remove('overflow-hidden');
   }
-  
+
   handleFormSubmit(formData: any) {
     if (this.isEditMode) {
       this._service.updateProduct(this.product.id, formData).subscribe({
@@ -218,7 +242,7 @@ export class TableComponent {
       this.showAlert = false;
     }, 5000);
   }
-  
+
   showAlertMessage(message: string) {
     this.alertMessage = message;
     this.showAlert = true;
